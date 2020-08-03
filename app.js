@@ -1,20 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const express = require("express");
+const hpp = require("hpp");
+const helmet = require("helmet");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+
 const app = express();
 
+app.use(hpp());
+app.use(helmet());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*'); // 'Access-Control-Allow-Origin' ,*: wild card
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE'); // to use specific http methods
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, Accept, Content-Type, Authorization, X-Requested-With'); // it can receive these keys of the headers
-
-  next(); // can be handled by routes
-}); // CORS Error RESOLVED
 
 // routes
 // middleware
-
 
 // general error handling
 app.use((error, req, res, next) => {
