@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const User = require("../models/user");
-const errorHandler = require("../utils");
+const { errorGenerator } = require("../utils");
 
 module.exports = async (req, res, next) => {
   try {
@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
     const { _id } = decodedToken;
 
     const user = await User.findOne({ _id });
-    if (!user) errorHandler("Not found User", "404");
+    if (!user) errorGenerator("Not found User", "404");
 
     req.user = user;
     next();

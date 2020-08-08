@@ -1,10 +1,10 @@
-const { errorHandler } = require("../utils/");
+const { errorGenerator } = require("../utils/");
 const User = require("../models/user");
 const Product = require("../models/product");
 const bodyParser = require("body-parser");
 
 const cartActionHandler = async (user, { countAction, productId }) => {
-  if (typeof countAction !== "boolean") errorHandler("Invalid Input", 400);
+  if (typeof countAction !== "boolean") errorGenerator("Invalid Input", 400);
 
   let foundIndex;
   const foundCartProduct = user.carts.find((cart, index) => {
@@ -45,7 +45,7 @@ const addProductToCarts = async (user, { productId, size, count }) => {
   }
 
   const product = await Product.findOne({ productId });
-  if (!product) errorHandler("Product not found", 404);
+  if (!product) errorGenerator("Product not found", 404);
 
   const { title, price, imageUrl } = product;
   const cartProduct = {

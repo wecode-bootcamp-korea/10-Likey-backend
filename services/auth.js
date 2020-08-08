@@ -27,10 +27,10 @@ const createToken = (userId) => {
   return token;
 };
 
-const kakaoLoginInfo = async (token) => {
+const kakaoLoginInfo = async (kakaoToken) => {
   const { data } = await axios.get("https://kapi.kakao.com/v2/user/me", {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${kakaoToken}`,
     },
   });
 
