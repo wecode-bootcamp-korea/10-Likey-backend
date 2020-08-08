@@ -1,8 +1,6 @@
 const Product = require("../models/product");
 
-const findProducts = async (query = null) => {
-  // const counts = await Product.find(query).countDocuments();
-  // console.log(counts);
+const findProducts = (query = null) => {
   return Product.find(query);
 };
 
