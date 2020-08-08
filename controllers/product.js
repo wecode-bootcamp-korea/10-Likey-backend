@@ -1,15 +1,17 @@
-// const Product = require("../models/product");
-const mongoose = require("mongoose");
-const { findProducts, findProduct } = require("../services/product");
+const Product = require("../models/product");
+const { errorHandler } = require("../utils/");
 
-exports.getProducts = async (req, res, next) => {
+const getProducts = async (req, res, next) => {
   try {
-    const products = await findProducts(req.query);
+    const { offset, limit, color, gender } = req.query;
 
-    if (!products) {
-      const error = new Error("Products not found");
-      error.statusCode = 404;
-      throw error;
+    let products;
+    if (color || gender) {
+      products = await Product.find(req.query).limit(20);
+    }
+
+    if (offset || limit) {
+      products = await Product.find().skip(Number(offset)).limit(Number(limit));
     }
 
     res.status(200).json({
@@ -21,34 +23,31 @@ exports.getProducts = async (req, res, next) => {
   }
 };
 
-exports.getProductTitles = async (req, res, next) => {
+const getProductTitles = async (req, res, next) => {
   try {
-    const products = await findProducts();
-
-    if (!products) {
-      const error = new Error("Products not found");
-      error.statusCode = 404;
-      throw error;
-    }
+    const products = await Product.find().limit(30);
 
     res.status(200).json({
       message: "titles",
-      titles: products.map((product) => product.title),
+      titles: products.map(({ title, productId }) => {
+        return {
+          title,
+          productId,
+        };
+      }),
     });
   } catch (err) {
     next(err);
   }
 };
 
-exports.getProduct = async (req, res, next) => {
+const getProduct = async (req, res, next) => {
   try {
     const { productId } = req.params;
-    const product = await findProduct(productId);
-    if (!product) {
-      const error = new Error("Product not exist");
-      error.statusCode = 404;
-      throw error;
-    }
+    const product = await Product.findOne({ productId });
+
+    if (!product) errorHandler("Product not exist", 404);
+
     const { images, title, price, categories, sizes, options } = product;
     const result = {
       images,
@@ -64,3 +63,5 @@ exports.getProduct = async (req, res, next) => {
     next(err);
   }
 };
+
+module.exports = { getProducts, getProductTitles, getProduct };

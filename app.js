@@ -3,24 +3,20 @@ const hpp = require("hpp");
 const helmet = require("helmet");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const logger = require("morgan")("dev");
 
-const productRoutes = require("./routes/product");
+const router = require("./routes");
 
 const app = express();
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(hpp());
 app.use(helmet());
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
+app.use(cors());
+app.use(logger);
 
 // routes
-app.use("/product", productRoutes);
+router(app);
 
 // middleware
 
