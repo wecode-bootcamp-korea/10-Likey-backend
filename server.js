@@ -8,7 +8,6 @@ const mongoose = require("./database");
     // db connection
     await mongoose;
     console.log("DB CONNECTED");
-
     server.listen(8000, () =>
       console.log("Server is listening to port: ", 8000)
     );

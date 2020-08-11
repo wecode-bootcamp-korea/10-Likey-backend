@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config ./jest.config.json",
+    "test:watch": "npm run test -- --watch",
     "start": "nodemon server.js"
   },
   "repository": {
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/wecode-bootcamp-korea/10-Likey-backend#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
@@ -31,6 +33,7 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
+    "jest": "^26.3.0",
     "nodemon": "^2.0.4"
   }
 }

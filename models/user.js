@@ -17,7 +17,7 @@ const userSchema = new Schema({
   },
   phone: {
     type: String,
-    required: true,
+    default: 0,
   },
   carts: {
     type: [Object],
