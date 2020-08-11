@@ -12,7 +12,7 @@ const connectDatabase = async () => {
 };
 
 const disconnectDatabase = async () => {
-  return mongoose.close();
+  return mongoose.disconnect();
 };
 
 const customAxios = async ({

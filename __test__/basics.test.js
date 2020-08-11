@@ -3,14 +3,12 @@ const {
   disconnectDatabase,
   customAxios,
 } = require("./test_utils");
-const { expectCt } = require("helmet");
 
-describe("db connection check", () => {
+describe("test_util functions unit tests", () => {
   test("db 연결", async () => {
     let connected;
     try {
       connected = await connectDatabase();
-      console.log(connected);
     } catch (err) {
       console.log(err);
     } finally {
@@ -22,11 +20,21 @@ describe("db connection check", () => {
     let disconnected;
     try {
       disconnected = await disconnectDatabase();
-      console.log(disconnected);
+      expect(disconnected).toBeUndefined();
     } catch (err) {
       console.log(err);
-    } finally {
-      expect(disconnected).toBeTruthy();
     }
+  });
+
+  test("customized Axios function", async () => {
+    const response = await customAxios({
+      url: "http://10.58.7.172:8000",
+      endpoint: "/product",
+    });
+
+    expect(response.status).toBe(200);
+    expect(response.data.products.length).toBe(20);
+    expect(response.data.products[0]).toHaveProperty("productId");
+    expect(response.data.products[19]).toHaveProperty("color");
   });
 });
