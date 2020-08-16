@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const Product = require("./product").schema;
 
 const userSchema = new Schema({
   kakaoId: {
