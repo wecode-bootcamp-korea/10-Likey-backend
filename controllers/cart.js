@@ -1,6 +1,6 @@
 const {
-  cartActionHandler,
-  addProductToCarts,
+  getProductInCart,
+  createNewProduct,
   deleteOneInCarts,
   deleteAllinCarts,
 } = require("../services/cart");
@@ -19,15 +19,21 @@ const getCarts = async (req, res, next) => {
 
 const postCarts = async (req, res, next) => {
   try {
-    let { user } = req;
+    let { user, body: { count } } = req;
 
-    user =
-      typeof req.body.countAction === "boolean"
-        ? await cartActionHandler(user, req.body)
-        : await addProductToCarts(user, req.body);
+    const [foundIndex, foundCartProduct] = getProductInCart(user, req.body);
+
+    if (foundCartProduct) {
+      user.carts.set(foundIndex, {
+        ...foundCartProduct,
+        count,
+      });
+    } else {
+      const newProduct = await createNewProduct(req.body);
+      user.carts.push(newProduct);
+    }
 
     await user.save();
-
     res.status(200).json({
       message: "SUCCESS",
       productId: req.body.productId,

@@ -1,54 +1,25 @@
 const { errorGenerator } = require("../utils/");
 const User = require("../models/user");
 const Product = require("../models/product");
-const bodyParser = require("body-parser");
 
-const cartActionHandler = async (user, { countAction, productId }) => {
-  if (typeof countAction !== "boolean") errorGenerator("Invalid Input", 400);
-
+const getProductInCart = (user, { productId, size }) => {
   let foundIndex;
-  const foundCartProduct = user.carts.find((cart, index) => {
-    if (cart.productId === productId) {
-      foundIndex = index;
-      return true;
-    }
-  });
-
-  const changedCount = foundCartProduct.count + (countAction ? +1 : -1);
-
-  user.carts.set(foundIndex, {
-    ...foundCartProduct,
-    count: changedCount,
-  });
-
-  return user;
-};
-
-const addProductToCarts = async (user, { productId, size, count }) => {
-  let foundIndex;
-  let changedCount;
   const foundCartProduct = user.carts.find((cart, index) => {
     if (cart.productId === productId && cart.size === size) {
       foundIndex = index;
-      changedCount = count;
       return true;
     }
   });
 
-  if (foundCartProduct) {
-    user.carts.set(foundIndex, {
-      ...foundCartProduct,
-      count: changedCount,
-    });
+  return [foundIndex, foundCartProduct];
+};
 
-    return user;
-  }
-
+const createNewProduct = async ({ productId, size, count }) => {
   const product = await Product.findOne({ productId });
   if (!product) errorGenerator("Product not found", 404);
 
   const { title, price, imageUrl } = product;
-  const cartProduct = {
+  const newProduct = {
     title,
     price,
     imageUrl,
@@ -57,9 +28,7 @@ const addProductToCarts = async (user, { productId, size, count }) => {
     productId,
   };
 
-  user.carts.push(cartProduct);
-
-  return user;
+  return newProduct;
 };
 
 const deleteOneInCarts = (_id, productId, size) => {
@@ -71,8 +40,8 @@ const deleteAllinCarts = (_id) => {
 };
 
 module.exports = {
-  cartActionHandler,
-  addProductToCarts,
+  getProductInCart,
+  createNewProduct,
   deleteOneInCarts,
   deleteAllinCarts,
 };
