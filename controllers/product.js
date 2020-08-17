@@ -1,5 +1,5 @@
 const Product = require("../models/product");
-const { errorHandler } = require("../utils/");
+const { errorGenerator } = require("../utils/");
 
 const getProducts = async (req, res, next) => {
   try {
@@ -46,7 +46,7 @@ const getProduct = async (req, res, next) => {
     const { productId } = req.params;
     const product = await Product.findOne({ productId });
 
-    if (!product) errorHandler("Product not exist", 404);
+    if (!product) errorGenerator("Product not exist", 404);
 
     const { images, title, price, categories, sizes, options } = product;
     const result = {

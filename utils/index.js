@@ -1,5 +1,5 @@
-const errorHandler = require("./errorHandler");
+const errorGenerator = require("./errorGenerator");
 
 module.exports = {
-  errorHandler,
+  errorGenerator,
 };
