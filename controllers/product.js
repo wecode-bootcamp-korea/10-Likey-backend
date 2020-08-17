@@ -3,16 +3,15 @@ const { errorGenerator } = require("../utils/");
 
 const getProducts = async (req, res, next) => {
   try {
-    const { offset, limit, color, gender } = req.query;
+    const { offset, limit, color = null, gender = null } = req.query;
 
-    let products;
-    if (color || gender) {
-      products = await Product.find(req.query).limit(20);
-    }
+    const searchOptions = {
+      [color && "color"]: color,
+      [gender && "gender"]: gender,
+    };
 
-    if (offset || limit) {
-      products = await Product.find().skip(Number(offset)).limit(Number(limit));
-    }
+    const products = await Product.find(searchOptions).skip(Number(offset))
+      .limit(Number(limit));
 
     res.status(200).json({
       message: "products",
