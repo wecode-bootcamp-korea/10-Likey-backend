@@ -7,3 +7,4 @@
 - Node.js
 - Express
 - MongoDB, mongoose
+- puppeteer
